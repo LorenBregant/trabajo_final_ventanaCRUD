@@ -29,7 +29,7 @@ CREATE TABLE `personas` (
   `dni` varchar(12) NOT NULL,
   `edad` int(11) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=47 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=57 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -81,7 +81,15 @@ INSERT INTO `personas` VALUES
 (43,'Ezequiel','Medina','19.243.992',34),
 (44,'Hugo','Torres','23.456.223',48),
 (45,'Sergio','Torres','20.304.504',54),
-(46,'Monica','Argento','23.567.543',46);
+(46,'Monica','Argento','23.567.543',46),
+(47,'Peter','Capusotto','20.432.506',69),
+(48,'Sergio','Luna','39.445.932',34),
+(49,'Marito','Baracus','30.392.449',37),
+(50,'Megan','Fox','39.203.003',38),
+(52,'Chicharito','Hernandez','49.292.030',40),
+(54,'Luis','Suarez','20.309.442',37),
+(55,'Gonzalo','Heredia','29.384.992',28),
+(56,'Fernando','Gago','28.394.922',41);
 /*!40000 ALTER TABLE `personas` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -94,4 +102,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-12-01  3:36:33
+-- Dump completed on 2023-12-01 15:36:05
