@@ -73,8 +73,12 @@ class VentanaDatos(QDialog):
 
     def cargar_datos_desde_bd(self):
         """Carga los datos desde la base de datos y actualiza la tabla."""
-        self.datos = bbdd.obtener_datos_desde_bd()
-        self.actualizar_tabla()
+        try:
+            self.datos = bbdd.obtener_datos_desde_bd()
+            self.actualizar_tabla()
+        except Exception as e:
+            # Manejar adecuadamente las excepciones, por ejemplo, mostrar un mensaje de error
+            print(f"Error al cargar datos desde la base de datos: {e}")
 
     def actualizar_tabla(self):
         """Actualiza la tabla con los datos cargados desde la base de datos."""
@@ -85,16 +89,25 @@ class VentanaDatos(QDialog):
         if not self.datos:
             return
 
-        self.tabla.setRowCount(len(self.datos))
-        self.tabla.setColumnCount(len(self.datos[0]))
+        try:
+            # Configurar el número de filas y columnas
+            num_filas = len(self.datos)
+            num_columnas = len(self.datos[0])
 
-        self.tabla.setHorizontalHeaderLabels(["ID", "Nombre", "Apellido", "DNI", "Edad"])
+            self.tabla.setRowCount(num_filas)
+            self.tabla.setColumnCount(num_columnas)
 
-        for fila, datos_fila in enumerate(self.datos):
-            for columna, valor in enumerate(datos_fila):
-                item = QTableWidgetItem(str(valor))
-                item.setFlags(item.flags() & ~Qt.ItemIsEditable)  # Deshabilita la edición de celdas
-                self.tabla.setItem(fila, columna, item)
+            # Configurar encabezados de columna
+            self.tabla.setHorizontalHeaderLabels(["ID", "Nombre", "Apellido", "DNI", "Edad"])
+
+            for fila, datos_fila in enumerate(self.datos):
+                for columna, valor in enumerate(datos_fila):
+                    item = QTableWidgetItem(str(valor))
+                    item.setFlags(item.flags() & ~Qt.ItemIsEditable)  # Deshabilita la edición de celdas
+                    self.tabla.setItem(fila, columna, item)
+        except Exception as e:
+            # Manejar adecuadamente las excepciones, por ejemplo, mostrar un mensaje de error
+            print(f"Error al actualizar la tabla: {e}")
 
     def filtrar_tabla(self):
         """Filtra la tabla según el ID o DNI especificado en los cuadros de búsqueda."""

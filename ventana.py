@@ -1,5 +1,5 @@
 import sys
-from PySide6.QtWidgets import QApplication, QMainWindow, QFrame, QLabel, QLineEdit, QPushButton, QVBoxLayout, QMessageBox
+from PySide6.QtWidgets import QApplication, QMainWindow, QFrame, QLabel, QLineEdit, QPushButton, QVBoxLayout, QMessageBox, QTableWidget, QTableWidgetItem
 from PySide6.QtCore import Qt
 import mysql.connector
 import re
@@ -108,7 +108,10 @@ class Ventana(QMainWindow):
         for nombre, apellido, dni, edad in cursor.fetchall():
             datos.append((nombre, apellido, dni, edad))
         cursor.close()
-        return datos
+
+        if self.ventana_datos is not None:
+            self.ventana_datos.datos = datos
+            self.ventana_datos.actualizar_tabla()
 
     def guardar_datos(self, nombre, apellido, dni, edad):
         cursor = self.conexion.cursor()
@@ -134,6 +137,7 @@ class Ventana(QMainWindow):
 
                 if self.ventana_datos is not None:
                     self.ventana_datos.cargar_datos_desde_bd()
+                    self.ventana_datos.actualizar_tabla()
 
             except mysql.connector.Error as error:
                 QMessageBox.warning(self, "Error", f"Error al guardar registro en la base de datos: {error}")
@@ -146,7 +150,7 @@ class Ventana(QMainWindow):
             self.ventana_datos.cargar_datos_desde_bd()
             self.ventana_datos.actualizar_tabla()
 
-            self.ventana_datos.exec_()
+            self.ventana_datos.show()
         except mysql.connector.Error as error:
             QMessageBox.warning(self, "Error", f"Error de MySQL: {error}")
 
@@ -173,7 +177,7 @@ class Ventana(QMainWindow):
             QMessageBox.warning(self, "Error", "El nombre y el apellido solo deben contener letras.")
             return
 
-        #Capitalizar nombres o apellidos compuestos.
+        # Capitalizar nombres o apellidos compuestos.
         nombre = ' '.join(part.capitalize() for part in nombre.split())
         apellido = ' '.join(part.capitalize() for part in apellido.split())
 
@@ -190,6 +194,7 @@ class Ventana(QMainWindow):
 
         if self.ventana_datos is not None:
             self.ventana_datos.cargar_datos_desde_bd()
+            self.ventana_datos.actualizar_tabla()
 
         self.entrada_nombre.clear()
         self.entrada_apellido.clear()
