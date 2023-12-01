@@ -18,6 +18,8 @@ class Ventana(QMainWindow):
 
         # Inicializar la ventana de datos
         self.ventana_datos = VentanaDatos()
+        self.ventana_datos.cargar_datos_desde_bd()
+        self.ventana_datos.actualizar_tabla()
         self.setWindowTitle("Ingreso de Datos")
 
     def inicializar_ui(self):
@@ -146,11 +148,12 @@ class Ventana(QMainWindow):
         try:
             if self.ventana_datos is None:
                 self.ventana_datos = VentanaDatos()
-
-            self.ventana_datos.cargar_datos_desde_bd()
+            
             self.ventana_datos.actualizar_tabla()
+            self.ventana_datos.cargar_datos_desde_bd()
+            
 
-            self.ventana_datos.show()
+            self.ventana_datos.exec_()
         except mysql.connector.Error as error:
             QMessageBox.warning(self, "Error", f"Error de MySQL: {error}")
 

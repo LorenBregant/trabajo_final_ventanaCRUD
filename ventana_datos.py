@@ -40,6 +40,7 @@ class VentanaDatos(QDialog):
 
         # Agrega los encabezados de las columnas (opcional)
         self.tabla.setHorizontalHeaderLabels(["ID", "Nombre", "Apellido", "DNI", "Edad"])
+        print("self.tabla creada:", self.tabla)  # Agrega este print
 
         # Botón para cerrar la ventana
         boton_cerrar = QPushButton("Cerrar")
@@ -77,14 +78,12 @@ class VentanaDatos(QDialog):
             self.datos = bbdd.obtener_datos_desde_bd()
             self.actualizar_tabla()
         except Exception as e:
-            # Manejar adecuadamente las excepciones, por ejemplo, mostrar un mensaje de error
             print(f"Error al cargar datos desde la base de datos: {e}")
 
     def actualizar_tabla(self):
         """Actualiza la tabla con los datos cargados desde la base de datos."""
         self.tabla.clearContents()
         self.tabla.setRowCount(0)
-        self.tabla.setColumnCount(0)
 
         if not self.datos:
             return
@@ -97,7 +96,7 @@ class VentanaDatos(QDialog):
             self.tabla.setRowCount(num_filas)
             self.tabla.setColumnCount(num_columnas)
 
-            # Configurar encabezados de columna
+            # Configurar encabezados de columna (opcional)
             self.tabla.setHorizontalHeaderLabels(["ID", "Nombre", "Apellido", "DNI", "Edad"])
 
             for fila, datos_fila in enumerate(self.datos):
@@ -105,8 +104,8 @@ class VentanaDatos(QDialog):
                     item = QTableWidgetItem(str(valor))
                     item.setFlags(item.flags() & ~Qt.ItemIsEditable)  # Deshabilita la edición de celdas
                     self.tabla.setItem(fila, columna, item)
+
         except Exception as e:
-            # Manejar adecuadamente las excepciones, por ejemplo, mostrar un mensaje de error
             print(f"Error al actualizar la tabla: {e}")
 
     def filtrar_tabla(self):
@@ -145,22 +144,19 @@ class VentanaDatos(QDialog):
             resultado = ventana_edicion.exec_()
             if resultado == QDialog.Accepted:
                 datos_editados = ventana_edicion.obtener_datos_editados()
-                if datos_editados is not None:  # Comprueba si los datos editados son válidos
+                if datos_editados is not None:
                     id_registro = self.registro_seleccionado[0]
-
-                    # Capitaliza los valores editados antes de guardarlos
                     datos_editados = [valor.capitalize() if isinstance(valor, str) else valor for valor in datos_editados]
 
-                    # Capitaliza nombres y apellidos compuestos
                     for i in range(len(datos_editados)):
                         if isinstance(datos_editados[i], str):
                             datos_editados[i] = ' '.join(part.capitalize() for part in datos_editados[i].split())
 
-                    # Llama a la función de bbdd para modificar el registro con los datos editados
                     bbdd.modificar_registro(id_registro, datos_editados)
 
+                    # Actualizar la tabla después de la edición y cargar datos actualizados
+                    self.actualizar_tabla()
                     self.cargar_datos_desde_bd()
-                    self.actualizar_tabla()  # Actualiza la tabla después de la edición
 
     def eliminar_registro(self):
         """Elimina un registro de la base de datos y actualiza la tabla."""
