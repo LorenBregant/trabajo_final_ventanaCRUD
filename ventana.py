@@ -205,8 +205,11 @@ class Ventana(QMainWindow):
         self.entrada_edad.clear()
 
     def verificar_dni_existente(self, dni):
+        # Formatea el DNI ingresado para que coincida con el formato almacenado en la base de datos
+        dni_formateado = "{:,}".format(int(dni)).replace(",", ".")
+
         cursor = self.conexion.cursor()
-        cursor.execute("SELECT COUNT(*) FROM personas WHERE dni = %s", (dni,))
+        cursor.execute("SELECT COUNT(*) FROM personas WHERE dni = %s", (dni_formateado,))
         count = cursor.fetchone()[0]
         cursor.close()
         return count > 0
